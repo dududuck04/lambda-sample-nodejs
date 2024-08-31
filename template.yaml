@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: >
+  Stack for lmd-sample-nodejs Lambda Function'.
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    Timeout: 10  # Default value: 3 seconds
+    Handler: index.handler
+    Architectures:
+      - x86_64
+
+Parameters:
+  LambdaFunctionName:
+    Type: String
+    Default: lmd-sample-nodejs
+    Description: The name of the Lambda function.
+
+Resources:
+  AwsLambdaFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: !Ref LambdaFunctionName
+      CodeUri: functions/lmd-sample-function/
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Description: >
+        lmd-sample-nodejs Lambda Function'.
+      MemorySize: 1024
+      Role: arn:aws:iam::xxxx:role/duck's role
+      Layers:
+        - !Ref AwsLambdaLayer
+#   Node 패키지 Layer
+  AwsLambdaLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: AwsLambdaLayer
+      Description: Dependencies for lmd-sample-nodejs Lambda Function'.
+      CompatibleArchitectures:
+        - x86_64
+      CompatibleRuntimes:
+        - nodejs20.x
+      ContentUri: layers/lmd-sample-layer/
+      RetentionPolicy: 'Delete'
+    Metadata:
+      BuildMethod: makefile
+#Outputs:
+  # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-generated-resources.html

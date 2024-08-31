@@ -1,0 +1,16 @@
+version: 0.2
+
+env:
+  shell: bash
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+  build:
+    commands:
+      - echo Build started on `date`
+      - ls -alh ./
+      - sam build
+      - sam deploy --no-progressbar --no-fail-on-empty-changeset
